@@ -1,0 +1,24 @@
+{
+  "labelTypes": [
+    { "id": "expedition", "label": "Expédition", "description": "Étiquette colis sortant" },
+    { "id": "reception", "label": "Réception", "description": "Étiquette colis entrant" },
+    { "id": "produit", "label": "Produit", "description": "Étiquette article / référence" },
+    { "id": "palette", "label": "Palette", "description": "Étiquette palette complète" },
+    { "id": "retour", "label": "Retour", "description": "Étiquette retour client" }
+  ],
+  "labelQuantities": [1, 2, 5, 10, 20],
+  "documentTypes": [
+    { "id": "bon_livraison", "label": "Bon de livraison", "description": "BL pour expédition" },
+    { "id": "bon_reception", "label": "Bon de réception", "description": "BR pour réception" },
+    { "id": "fiche_preparation", "label": "Fiche de préparation", "description": "Liste de picking" },
+    { "id": "fiche_controle", "label": "Fiche de contrôle", "description": "Contrôle qualité" },
+    { "id": "bordereau", "label": "Bordereau d'envoi", "description": "Récapitulatif envoi" }
+  ],
+  "documentCopies": [1, 2, 3],
+  "zones": [
+    { "id": "entrepot", "label": "Entrepôt" },
+    { "id": "quai", "label": "Quai" },
+    { "id": "atelier", "label": "Atelier" },
+    { "id": "bureau", "label": "Bureau" }
+  ]
+}

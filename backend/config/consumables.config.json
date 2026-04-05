@@ -1,0 +1,18 @@
+{
+  "items": [
+    { "id": "cartons", "label": "Cartons", "unit": "unités" },
+    { "id": "scotch", "label": "Scotch d'emballage", "unit": "rouleaux" },
+    { "id": "film", "label": "Film étirable", "unit": "rouleaux" },
+    { "id": "etiquettes", "label": "Étiquettes", "unit": "rouleaux" },
+    { "id": "papier", "label": "Papier imprimante", "unit": "rames" },
+    { "id": "autre", "label": "Autre", "unit": "unités" }
+  ],
+  "quantities": [1, 2, 5, 10, 20],
+  "zones": [
+    { "id": "entrepot", "label": "Entrepôt" },
+    { "id": "quai", "label": "Quai" },
+    { "id": "atelier", "label": "Atelier" },
+    { "id": "bureau", "label": "Bureau" },
+    { "id": "autre", "label": "Autre" }
+  ]
+}

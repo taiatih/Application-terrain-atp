@@ -1,0 +1,18 @@
+{
+  "types": [
+    { "id": "produit_endommage", "label": "Produit endommagé" },
+    { "id": "etiquette_incorrecte", "label": "Étiquette incorrecte" },
+    { "id": "colis_manquant", "label": "Colis manquant" },
+    { "id": "erreur_preparation", "label": "Erreur de préparation" },
+    { "id": "equipement_defaillant", "label": "Équipement défaillant" },
+    { "id": "securite", "label": "Sécurité / Risque" },
+    { "id": "autre", "label": "Autre" }
+  ],
+  "zones": [
+    { "id": "entrepot", "label": "Entrepôt" },
+    { "id": "quai", "label": "Quai" },
+    { "id": "atelier", "label": "Atelier" },
+    { "id": "bureau", "label": "Bureau" },
+    { "id": "autre", "label": "Autre" }
+  ]
+}

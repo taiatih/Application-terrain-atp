@@ -1,0 +1,12 @@
+{
+  "types": [
+    { "id": "nettoyage", "label": "Nettoyage entrepôt" },
+    { "id": "benne", "label": "Commande de benne" },
+    { "id": "maintenance", "label": "Maintenance légère" },
+    { "id": "autre", "label": "Autre" }
+  ],
+  "urgencies": [
+    { "id": "normal", "label": "Normal" },
+    { "id": "urgent", "label": "Urgent" }
+  ]
+}
