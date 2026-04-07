@@ -7,11 +7,13 @@ interface Props {
   onChange: (v: string) => void;
   onNext: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function PrintStep6_Comment({ comment, onChange, onNext, onBack }: Props) {
+export default function PrintStep6_Comment({ comment, onChange, onNext, onBack, step, totalSteps }: Props) {
   return (
-    <StepScreen title="Commentaire (optionnel)">
+    <StepScreen title="Commentaire (optionnel)" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-3">
         <textarea
           value={comment}

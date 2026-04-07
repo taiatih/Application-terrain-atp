@@ -6,6 +6,7 @@ import { quickActionRoutes } from './api/quick-action.route';
 import { consumableRoutes } from './api/consumable.route';
 import { anomalyRoutes } from './api/anomaly.route';
 import { printingRoutes } from './api/printing.route';
+import { operatorsRoutes } from './api/operators.route';
 
 const server = Fastify({ logger: true });
 
@@ -23,6 +24,7 @@ server.register(quickActionRoutes, { prefix: '/api' });
 server.register(consumableRoutes, { prefix: '/api' });
 server.register(anomalyRoutes, { prefix: '/api' });
 server.register(printingRoutes, { prefix: '/api' });
+server.register(operatorsRoutes, { prefix: '/api' });
 
 const start = async () => {
   const port = Number(process.env.PORT) || 3001;

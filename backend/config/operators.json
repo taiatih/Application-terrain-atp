@@ -1,0 +1,9 @@
+{
+  "operators": [
+    { "id": "OP001", "prenom": "Hamid",    "badge": "ATP-001" },
+    { "id": "OP002", "prenom": "Erwan",    "badge": "ATP-002" },
+    { "id": "OP003", "prenom": "Sandra",   "badge": "ATP-003" },
+    { "id": "OP004", "prenom": "Jonathan", "badge": "ATP-004" },
+    { "id": "OP005", "prenom": "Céline",   "badge": "ATP-005" }
+  ]
+}

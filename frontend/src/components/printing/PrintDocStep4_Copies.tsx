@@ -8,11 +8,13 @@ interface Props {
   onSelect: (n: number) => void;
   onNext: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function PrintDocStep4_Copies({ copies, selected, onSelect, onNext, onBack }: Props) {
+export default function PrintDocStep4_Copies({ copies, selected, onSelect, onNext, onBack, step, totalSteps }: Props) {
   return (
-    <StepScreen title="Nombre d'exemplaires">
+    <StepScreen title="Nombre d'exemplaires" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-3 gap-3">
           {copies.map((n) => (

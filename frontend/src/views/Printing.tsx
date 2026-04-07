@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PrintingMode } from '../types/app.types';
+import { useSession } from '../context/SessionContext';
 
 // Label flow
 import { usePrintLabelForm } from '../hooks/usePrintLabelForm';
-import PrintStep1_Demandeur from '../components/printing/PrintStep1_Demandeur';
 import PrintLabelStep2_SelectType from '../components/printing/PrintLabelStep2_SelectType';
 import PrintLabelStep3_Reference from '../components/printing/PrintLabelStep3_Reference';
 import PrintLabelStep4_Quantity from '../components/printing/PrintLabelStep4_Quantity';
@@ -22,8 +22,29 @@ interface Props {
   onHome: () => void;
 }
 
+// Mapping étape string → numéro pour la barre de progression
+const LABEL_STEP_MAP: Record<string, number> = {
+  selectType: 1,
+  reference: 2,
+  quantity: 3,
+  zone: 4,
+  comment: 5,
+  summary: 6,
+};
+const LABEL_TOTAL = 6;
+
+const DOC_STEP_MAP: Record<string, number> = {
+  selectType: 1,
+  reference: 2,
+  copies: 3,
+  zone: 4,
+  comment: 5,
+  summary: 6,
+};
+const DOC_TOTAL = 6;
+
 // ─── Écran de sélection du mode ──────────────────────────────────────────────
-function ModeSelector({ onSelect }: { onSelect: (m: PrintingMode) => void }) {
+function ModeSelector({ onSelect, onHome }: { onSelect: (m: PrintingMode) => void; onHome: () => void }) {
   return (
     <div className="flex flex-col h-full p-6">
       <h2 className="text-2xl font-bold text-gray-800 text-center mb-2">Impression</h2>
@@ -42,6 +63,12 @@ function ModeSelector({ onSelect }: { onSelect: (m: PrintingMode) => void }) {
           📄 Document
         </button>
       </div>
+      <button
+        onClick={onHome}
+        className="mt-6 w-full py-3 text-sm text-gray-400 hover:text-gray-600 transition-colors"
+      >
+        ← Retour à l'accueil
+      </button>
     </div>
   );
 }
@@ -117,7 +144,19 @@ function ResultScreen({
 
 // ─── Parcours Étiquette ───────────────────────────────────────────────────────
 function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void }) {
+  const { operator, setFormActive } = useSession();
   const { step, form, config, status, resultMessage, jobId, update, next, back, submit, reset } = usePrintLabelForm();
+
+  const stepNum = LABEL_STEP_MAP[step as string] ?? 1;
+
+  useEffect(() => {
+    if (operator) update({ demandeur: operator.prenom });
+  }, [operator]);
+
+  useEffect(() => {
+    setFormActive(step !== 'selectType');
+    return () => setFormActive(false);
+  }, [step, setFormActive]);
 
   if (!config) {
     return (
@@ -141,21 +180,15 @@ function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void 
 
   return (
     <>
-      {step === 'demandeur' && (
-        <PrintStep1_Demandeur
-          demandeur={form.demandeur}
-          onChange={(v) => update({ demandeur: v })}
-          onNext={next}
-          onBack={onBack}
-        />
-      )}
       {step === 'selectType' && (
         <PrintLabelStep2_SelectType
           labelTypes={config.labelTypes}
           selected={form.labelType}
           onSelect={(id, label) => update({ labelType: id, labelTypeLabel: label })}
           onNext={next}
-          onBack={back}
+          onBack={onBack}
+          step={stepNum}
+          totalSteps={LABEL_TOTAL}
         />
       )}
       {step === 'reference' && (
@@ -165,6 +198,8 @@ function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void 
           onChange={(v) => update({ reference: v })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={LABEL_TOTAL}
         />
       )}
       {step === 'quantity' && (
@@ -174,6 +209,8 @@ function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void 
           onSelect={(q) => update({ quantity: q })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={LABEL_TOTAL}
         />
       )}
       {step === 'zone' && (
@@ -183,6 +220,8 @@ function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void 
           onSelect={(id, label) => update({ zone: id, zoneLabel: label })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={LABEL_TOTAL}
         />
       )}
       {step === 'comment' && (
@@ -191,10 +230,18 @@ function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void 
           onChange={(v) => update({ comment: v })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={LABEL_TOTAL}
         />
       )}
       {step === 'summary' && (
-        <PrintLabelStep7_Summary form={form} onConfirm={submit} onBack={back} />
+        <PrintLabelStep7_Summary
+          form={form}
+          onConfirm={submit}
+          onBack={back}
+          step={stepNum}
+          totalSteps={LABEL_TOTAL}
+        />
       )}
     </>
   );
@@ -202,7 +249,19 @@ function LabelFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void 
 
 // ─── Parcours Document ────────────────────────────────────────────────────────
 function DocumentFlow({ onHome, onBack }: { onHome: () => void; onBack: () => void }) {
+  const { operator, setFormActive } = useSession();
   const { step, form, config, status, resultMessage, jobId, update, next, back, submit, reset } = usePrintDocumentForm();
+
+  const stepNum = DOC_STEP_MAP[step as string] ?? 1;
+
+  useEffect(() => {
+    if (operator) update({ demandeur: operator.prenom });
+  }, [operator]);
+
+  useEffect(() => {
+    setFormActive(step !== 'selectType');
+    return () => setFormActive(false);
+  }, [step, setFormActive]);
 
   if (!config) {
     return (
@@ -226,21 +285,15 @@ function DocumentFlow({ onHome, onBack }: { onHome: () => void; onBack: () => vo
 
   return (
     <>
-      {step === 'demandeur' && (
-        <PrintStep1_Demandeur
-          demandeur={form.demandeur}
-          onChange={(v) => update({ demandeur: v })}
-          onNext={next}
-          onBack={onBack}
-        />
-      )}
       {step === 'selectType' && (
         <PrintDocStep2_SelectType
           documentTypes={config.documentTypes}
           selected={form.documentType}
           onSelect={(id, label) => update({ documentType: id, documentTypeLabel: label })}
           onNext={next}
-          onBack={back}
+          onBack={onBack}
+          step={stepNum}
+          totalSteps={DOC_TOTAL}
         />
       )}
       {step === 'reference' && (
@@ -250,6 +303,8 @@ function DocumentFlow({ onHome, onBack }: { onHome: () => void; onBack: () => vo
           onChange={(v) => update({ reference: v })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={DOC_TOTAL}
         />
       )}
       {step === 'copies' && (
@@ -259,6 +314,8 @@ function DocumentFlow({ onHome, onBack }: { onHome: () => void; onBack: () => vo
           onSelect={(n) => update({ copies: n })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={DOC_TOTAL}
         />
       )}
       {step === 'zone' && (
@@ -268,6 +325,8 @@ function DocumentFlow({ onHome, onBack }: { onHome: () => void; onBack: () => vo
           onSelect={(id, label) => update({ zone: id, zoneLabel: label })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={DOC_TOTAL}
         />
       )}
       {step === 'comment' && (
@@ -276,10 +335,18 @@ function DocumentFlow({ onHome, onBack }: { onHome: () => void; onBack: () => vo
           onChange={(v) => update({ comment: v })}
           onNext={next}
           onBack={back}
+          step={stepNum}
+          totalSteps={DOC_TOTAL}
         />
       )}
       {step === 'summary' && (
-        <PrintDocStep7_Summary form={form} onConfirm={submit} onBack={back} />
+        <PrintDocStep7_Summary
+          form={form}
+          onConfirm={submit}
+          onBack={back}
+          step={stepNum}
+          totalSteps={DOC_TOTAL}
+        />
       )}
     </>
   );
@@ -291,7 +358,7 @@ export default function Printing({ onHome }: Props) {
 
   return (
     <div className="flex flex-col h-full">
-      {mode === null && <ModeSelector onSelect={setMode} />}
+      {mode === null && <ModeSelector onSelect={setMode} onHome={onHome} />}
       {mode === 'label' && <LabelFlow onHome={onHome} onBack={() => setMode(null)} />}
       {mode === 'document' && <DocumentFlow onHome={onHome} onBack={() => setMode(null)} />}
     </div>

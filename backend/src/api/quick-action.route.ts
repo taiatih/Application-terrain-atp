@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { createClickUpTask } from '../services/clickup.service';
+import { createQuickActionTask } from '../services/clickup.service';
 import { createQuickActionSchema } from '../types/quick-action.schema';
 
 export async function quickActionRoutes(server: FastifyInstance): Promise<void> {
@@ -18,7 +18,7 @@ export async function quickActionRoutes(server: FastifyInstance): Promise<void> 
 
     // 2. Appel service ClickUp
     try {
-      const task = await createClickUpTask(parsed.data);
+      const task = await createQuickActionTask(parsed.data);
       server.log.info({ taskId: task.id }, 'Tâche ClickUp créée avec succès');
       return reply.code(201).send({
         success: true,

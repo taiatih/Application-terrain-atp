@@ -8,9 +8,11 @@ interface Props {
   defaultValue: string;
   onNext: (zone: string, zoneLabel: string) => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function AnomalyStep4_SelectZone({ config, defaultValue, onNext, onBack }: Props) {
+export default function AnomalyStep4_SelectZone({ config, defaultValue, onNext, onBack, step, totalSteps }: Props) {
   const [selected, setSelected] = useState<string>(defaultValue);
 
   const handleNext = () => {
@@ -19,7 +21,7 @@ export default function AnomalyStep4_SelectZone({ config, defaultValue, onNext, 
   };
 
   return (
-    <StepScreen title="Zone concernée">
+    <StepScreen title="Zone concernée" step={step} totalSteps={totalSteps}>
       <p className="text-sm text-gray-400 text-center -mt-2">
         Optionnel — laissez vide si non applicable.
       </p>

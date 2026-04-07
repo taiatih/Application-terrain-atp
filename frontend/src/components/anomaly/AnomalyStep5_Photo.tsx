@@ -6,9 +6,11 @@ interface Props {
   defaultValue: string;
   onNext: (photoBase64: string) => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function AnomalyStep5_Photo({ defaultValue, onNext, onBack }: Props) {
+export default function AnomalyStep5_Photo({ defaultValue, onNext, onBack, step, totalSteps }: Props) {
   const [preview, setPreview] = useState<string>(defaultValue);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -32,7 +34,7 @@ export default function AnomalyStep5_Photo({ defaultValue, onNext, onBack }: Pro
   };
 
   return (
-    <StepScreen title="Photo de l'anomalie">
+    <StepScreen title="Photo de l'anomalie" step={step} totalSteps={totalSteps}>
       <p className="text-sm text-gray-400 text-center -mt-2">
         Optionnel — prenez une photo ou importez une image.
       </p>

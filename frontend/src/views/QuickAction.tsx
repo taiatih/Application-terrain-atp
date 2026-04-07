@@ -10,6 +10,9 @@ interface QuickActionProps {
   onBackToHome: () => void;
 }
 
+// Étapes actives avec barre de progression : 1=type, 2=urgence, 3=commentaire, 4=récap
+const TOTAL_STEPS = 4;
+
 export default function QuickAction({ onBackToHome }: QuickActionProps) {
   const {
     step,
@@ -26,7 +29,6 @@ export default function QuickAction({ onBackToHome }: QuickActionProps) {
     reset,
   } = useQuickActionForm();
 
-  // Chargement de la config
   if (configLoading) {
     return (
       <div className="flex flex-col justify-center items-center h-full gap-4">
@@ -36,7 +38,6 @@ export default function QuickAction({ onBackToHome }: QuickActionProps) {
     );
   }
 
-  // Erreur de chargement de la config
   if (configError || !config) {
     return (
       <div className="flex flex-col justify-center items-center h-full p-6 text-center gap-4">
@@ -62,6 +63,8 @@ export default function QuickAction({ onBackToHome }: QuickActionProps) {
         return (
           <Step1_SelectType
             config={config}
+            step={1}
+            totalSteps={TOTAL_STEPS}
             onSelect={(id, label) => {
               setFormData((prev) => ({ ...prev, type: id, typeLabel: label }));
               nextStep();
@@ -73,6 +76,8 @@ export default function QuickAction({ onBackToHome }: QuickActionProps) {
         return (
           <Step2_SelectUrgency
             config={config}
+            step={2}
+            totalSteps={TOTAL_STEPS}
             onSelect={(urgency) => {
               setFormData((prev) => ({ ...prev, urgency }));
               nextStep();
@@ -84,6 +89,8 @@ export default function QuickAction({ onBackToHome }: QuickActionProps) {
         return (
           <Step3_AddComment
             defaultValue={formData.comment}
+            step={3}
+            totalSteps={TOTAL_STEPS}
             onNext={(comment) => {
               setFormData((prev) => ({ ...prev, comment }));
               nextStep();
@@ -95,6 +102,8 @@ export default function QuickAction({ onBackToHome }: QuickActionProps) {
         return (
           <Step4_Summary
             formData={formData}
+            step={4}
+            totalSteps={TOTAL_STEPS}
             onSubmit={submit}
             onBack={prevStep}
           />

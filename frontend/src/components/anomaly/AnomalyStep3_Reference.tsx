@@ -7,13 +7,15 @@ interface Props {
   defaultValue: string;
   onNext: (reference: string) => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function AnomalyStep3_Reference({ typeLabel, defaultValue, onNext, onBack }: Props) {
+export default function AnomalyStep3_Reference({ typeLabel, defaultValue, onNext, onBack, step, totalSteps }: Props) {
   const [value, setValue] = useState(defaultValue);
 
   return (
-    <StepScreen title="Référence concernée">
+    <StepScreen title="Référence concernée" step={step} totalSteps={totalSteps}>
       <p className="text-sm text-gray-500 text-center -mt-2">
         Anomalie : <span className="font-semibold text-gray-700">{typeLabel}</span>
       </p>

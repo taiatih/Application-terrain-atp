@@ -10,6 +10,8 @@ interface Props {
   defaultQuantity: number | null;
   onNext: (quantity: number) => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
 export default function Step2_SelectQuantity({
@@ -19,6 +21,8 @@ export default function Step2_SelectQuantity({
   defaultQuantity,
   onNext,
   onBack,
+  step,
+  totalSteps,
 }: Props) {
   const isPreset = defaultQuantity !== null && config.quantities.includes(defaultQuantity);
   const [selected, setSelected] = useState<number | null>(isPreset ? defaultQuantity : null);
@@ -44,7 +48,7 @@ export default function Step2_SelectQuantity({
   };
 
   return (
-    <StepScreen title={`Quantité — ${itemLabel}`}>
+    <StepScreen title={`Quantité — ${itemLabel}`} step={step} totalSteps={totalSteps}>
       {/* Grille de quantités rapides */}
       <div className="grid grid-cols-3 gap-3">
         {config.quantities.map((qty) => {

@@ -7,9 +7,11 @@ interface Props {
   formData: AnomalyFormData;
   onSubmit: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function AnomalyStep7_Summary({ formData, onSubmit, onBack }: Props) {
+export default function AnomalyStep7_Summary({ formData, onSubmit, onBack, step, totalSteps }: Props) {
   const rows: { label: string; value: string; accent?: boolean; italic?: boolean }[] = [
     { label: 'Signalé par', value: formData.demandeur },
     { label: "Type d'anomalie", value: formData.typeLabel, accent: true },
@@ -28,7 +30,7 @@ export default function AnomalyStep7_Summary({ formData, onSubmit, onBack }: Pro
   ];
 
   return (
-    <StepScreen title="Récapitulatif">
+    <StepScreen title="Récapitulatif" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-3 flex-grow">
         {rows.map((row) => (
           <div key={row.label} className="p-4 bg-gray-50 rounded-xl border border-gray-200">

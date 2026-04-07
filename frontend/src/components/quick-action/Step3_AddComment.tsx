@@ -6,13 +6,15 @@ interface Props {
   defaultValue: string;
   onNext: (comment: string) => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function Step3_AddComment({ defaultValue, onNext, onBack }: Props) {
+export default function Step3_AddComment({ defaultValue, onNext, onBack, step, totalSteps }: Props) {
   const [comment, setComment] = useState(defaultValue);
 
   return (
-    <StepScreen title="Commentaire (optionnel)">
+    <StepScreen title="Commentaire (optionnel)" step={step} totalSteps={totalSteps}>
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}

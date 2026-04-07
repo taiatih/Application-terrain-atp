@@ -8,9 +8,11 @@ interface Props {
   config: ConsumableConfig;
   onSubmit: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function Step5_Summary({ formData, config, onSubmit, onBack }: Props) {
+export default function Step5_Summary({ formData, config, onSubmit, onBack, step, totalSteps }: Props) {
   const zoneLabel = formData.zone
     ? config.zones.find((z) => z.id === formData.zone)?.label ?? formData.zone
     : null;
@@ -31,7 +33,7 @@ export default function Step5_Summary({ formData, config, onSubmit, onBack }: Pr
   ];
 
   return (
-    <StepScreen title="Récapitulatif">
+    <StepScreen title="Récapitulatif" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-3 flex-grow">
         {rows.map((row) => (
           <div

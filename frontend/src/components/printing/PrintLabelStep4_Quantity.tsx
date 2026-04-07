@@ -8,9 +8,11 @@ interface Props {
   onSelect: (q: number) => void;
   onNext: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function PrintLabelStep4_Quantity({ quantities, selected, onSelect, onNext, onBack }: Props) {
+export default function PrintLabelStep4_Quantity({ quantities, selected, onSelect, onNext, onBack, step, totalSteps }: Props) {
   const [custom, setCustom] = useState('');
 
   const handleCustom = (v: string) => {
@@ -25,7 +27,7 @@ export default function PrintLabelStep4_Quantity({ quantities, selected, onSelec
   };
 
   return (
-    <StepScreen title="Quantité d'étiquettes">
+    <StepScreen title="Quantité d'étiquettes" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-3 gap-3">
           {quantities.map((q) => (

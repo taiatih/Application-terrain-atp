@@ -14,7 +14,6 @@ const initialForm: PrintLabelFormData = {
 };
 
 export type PrintLabelStep =
-  | 'demandeur'
   | 'selectType'
   | 'reference'
   | 'quantity'
@@ -26,7 +25,7 @@ export type PrintLabelStep =
 export type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function usePrintLabelForm() {
-  const [step, setStep] = useState<PrintLabelStep>('demandeur');
+  const [step, setStep] = useState<PrintLabelStep>('selectType');
   const [form, setForm] = useState<PrintLabelFormData>(initialForm);
   const [config, setConfig] = useState<PrintingConfig | null>(null);
   const [configError, setConfigError] = useState(false);
@@ -46,7 +45,7 @@ export function usePrintLabelForm() {
 
   const next = () => {
     const order: PrintLabelStep[] = [
-      'demandeur', 'selectType', 'reference', 'quantity', 'zone', 'comment', 'summary', 'result',
+      'selectType', 'reference', 'quantity', 'zone', 'comment', 'summary', 'result',
     ];
     const idx = order.indexOf(step);
     if (idx < order.length - 1) setStep(order[idx + 1]);
@@ -54,7 +53,7 @@ export function usePrintLabelForm() {
 
   const back = () => {
     const order: PrintLabelStep[] = [
-      'demandeur', 'selectType', 'reference', 'quantity', 'zone', 'comment', 'summary', 'result',
+      'selectType', 'reference', 'quantity', 'zone', 'comment', 'summary', 'result',
     ];
     const idx = order.indexOf(step);
     if (idx > 0) setStep(order[idx - 1]);
@@ -95,7 +94,7 @@ export function usePrintLabelForm() {
 
   const reset = () => {
     setForm(initialForm);
-    setStep('demandeur');
+    setStep('selectType');
     setStatus('idle');
     setResultMessage('');
     setJobId('');

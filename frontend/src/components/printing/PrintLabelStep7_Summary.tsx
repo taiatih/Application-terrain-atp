@@ -7,9 +7,11 @@ interface Props {
   form: PrintLabelFormData;
   onConfirm: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function PrintLabelStep7_Summary({ form, onConfirm, onBack }: Props) {
+export default function PrintLabelStep7_Summary({ form, onConfirm, onBack, step, totalSteps }: Props) {
   const rows: { label: string; value: string; highlight?: boolean }[] = [
     { label: 'Demandeur', value: form.demandeur },
     { label: 'Type d\'étiquette', value: form.labelTypeLabel, highlight: true },
@@ -20,7 +22,7 @@ export default function PrintLabelStep7_Summary({ form, onConfirm, onBack }: Pro
   ];
 
   return (
-    <StepScreen title="Récapitulatif">
+    <StepScreen title="Récapitulatif" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-3">
         <div className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
           {rows.map((row, i) => (

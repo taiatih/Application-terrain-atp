@@ -8,11 +8,13 @@ interface Props {
   onChange: (v: string) => void;
   onNext: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
-export default function PrintDocStep3_Reference({ documentTypeLabel, reference, onChange, onNext, onBack }: Props) {
+export default function PrintDocStep3_Reference({ documentTypeLabel, reference, onChange, onNext, onBack, step, totalSteps }: Props) {
   return (
-    <StepScreen title="Référence">
+    <StepScreen title="Référence" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-3">
         <p className="text-base text-gray-500 text-center">
           Document : <span className="font-semibold text-gray-700">{documentTypeLabel}</span>

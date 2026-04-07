@@ -1,0 +1,4 @@
+{
+  "autoLogoutTimes": ["12:00", "17:00"],
+  "gracePeriodSeconds": 60
+}

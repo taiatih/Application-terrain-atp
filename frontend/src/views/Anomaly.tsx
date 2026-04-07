@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAnomalyForm } from '../hooks/useAnomalyForm';
-import AnomalyStep1_Demandeur from '../components/anomaly/AnomalyStep1_Demandeur';
+import { useSession } from '../context/SessionContext';
 import AnomalyStep2_SelectType from '../components/anomaly/AnomalyStep2_SelectType';
 import AnomalyStep3_Reference from '../components/anomaly/AnomalyStep3_Reference';
 import AnomalyStep4_SelectZone from '../components/anomaly/AnomalyStep4_SelectZone';
@@ -9,11 +9,14 @@ import AnomalyStep6_Comment from '../components/anomaly/AnomalyStep6_Comment';
 import AnomalyStep7_Summary from '../components/anomaly/AnomalyStep7_Summary';
 import Step5_Result from '../components/quick-action/Step5_Result';
 
+const TOTAL_STEPS = 6; // étapes 1 à 6 (hors résultat)
+
 interface AnomalyProps {
   onBackToHome: () => void;
 }
 
 export default function Anomaly({ onBackToHome }: AnomalyProps) {
+  const { operator, setFormActive } = useSession();
   const {
     step,
     formData,
@@ -29,9 +32,22 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
     reset,
   } = useAnomalyForm();
 
+  // Injecter le nom de l'opérateur depuis la session
+  useEffect(() => {
+    if (operator) {
+      setFormData((prev) => ({ ...prev, demandeur: operator.prenom }));
+    }
+  }, [operator, setFormData]);
+
+  // Signaler au contexte qu'une saisie est en cours (étape ≥ 2)
+  useEffect(() => {
+    setFormActive(step >= 2);
+    return () => setFormActive(false);
+  }, [step, setFormActive]);
+
   if (configLoading) {
     return (
-      <div className="flex flex-col justify-center items-center h-full gap-4">
+      <div className="flex flex-col justify-center items-center h-full gap-4 py-20">
         <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
         <p className="text-gray-500">Chargement...</p>
       </div>
@@ -59,20 +75,10 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
     onBackToHome();
   };
 
+  // Flow : 1=type, 2=référence, 3=zone, 4=photo, 5=commentaire, 6=récap, 7=résultat
   const renderStep = () => {
     switch (step) {
       case 1:
-        return (
-          <AnomalyStep1_Demandeur
-            defaultValue={formData.demandeur}
-            onNext={(demandeur) => {
-              setFormData((prev) => ({ ...prev, demandeur }));
-              nextStep();
-            }}
-            onBack={onBackToHome}
-          />
-        );
-      case 2:
         return (
           <AnomalyStep2_SelectType
             config={config}
@@ -80,10 +86,12 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
               setFormData((prev) => ({ ...prev, type, typeLabel }));
               nextStep();
             }}
-            onBack={prevStep}
+            onBack={onBackToHome}
+            step={1}
+            totalSteps={TOTAL_STEPS}
           />
         );
-      case 3:
+      case 2:
         return (
           <AnomalyStep3_Reference
             typeLabel={formData.typeLabel}
@@ -93,9 +101,11 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
               nextStep();
             }}
             onBack={prevStep}
+            step={2}
+            totalSteps={TOTAL_STEPS}
           />
         );
-      case 4:
+      case 3:
         return (
           <AnomalyStep4_SelectZone
             config={config}
@@ -105,9 +115,11 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
               nextStep();
             }}
             onBack={prevStep}
+            step={3}
+            totalSteps={TOTAL_STEPS}
           />
         );
-      case 5:
+      case 4:
         return (
           <AnomalyStep5_Photo
             defaultValue={formData.photoBase64}
@@ -116,9 +128,11 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
               nextStep();
             }}
             onBack={prevStep}
+            step={4}
+            totalSteps={TOTAL_STEPS}
           />
         );
-      case 6:
+      case 5:
         return (
           <AnomalyStep6_Comment
             defaultValue={formData.comment}
@@ -127,17 +141,21 @@ export default function Anomaly({ onBackToHome }: AnomalyProps) {
               nextStep();
             }}
             onBack={prevStep}
+            step={5}
+            totalSteps={TOTAL_STEPS}
           />
         );
-      case 7:
+      case 6:
         return (
           <AnomalyStep7_Summary
             formData={formData}
             onSubmit={submit}
             onBack={prevStep}
+            step={6}
+            totalSteps={TOTAL_STEPS}
           />
         );
-      case 8:
+      case 7:
         return (
           <Step5_Result
             result={result}

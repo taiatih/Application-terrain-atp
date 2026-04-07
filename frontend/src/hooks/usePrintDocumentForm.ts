@@ -14,7 +14,6 @@ const initialForm: PrintDocumentFormData = {
 };
 
 export type PrintDocumentStep =
-  | 'demandeur'
   | 'selectType'
   | 'reference'
   | 'copies'
@@ -26,7 +25,7 @@ export type PrintDocumentStep =
 export type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
 export function usePrintDocumentForm() {
-  const [step, setStep] = useState<PrintDocumentStep>('demandeur');
+  const [step, setStep] = useState<PrintDocumentStep>('selectType');
   const [form, setForm] = useState<PrintDocumentFormData>(initialForm);
   const [config, setConfig] = useState<PrintingConfig | null>(null);
   const [configError, setConfigError] = useState(false);
@@ -46,7 +45,7 @@ export function usePrintDocumentForm() {
 
   const next = () => {
     const order: PrintDocumentStep[] = [
-      'demandeur', 'selectType', 'reference', 'copies', 'zone', 'comment', 'summary', 'result',
+      'selectType', 'reference', 'copies', 'zone', 'comment', 'summary', 'result',
     ];
     const idx = order.indexOf(step);
     if (idx < order.length - 1) setStep(order[idx + 1]);
@@ -54,7 +53,7 @@ export function usePrintDocumentForm() {
 
   const back = () => {
     const order: PrintDocumentStep[] = [
-      'demandeur', 'selectType', 'reference', 'copies', 'zone', 'comment', 'summary', 'result',
+      'selectType', 'reference', 'copies', 'zone', 'comment', 'summary', 'result',
     ];
     const idx = order.indexOf(step);
     if (idx > 0) setStep(order[idx - 1]);
@@ -95,7 +94,7 @@ export function usePrintDocumentForm() {
 
   const reset = () => {
     setForm(initialForm);
-    setStep('demandeur');
+    setStep('selectType');
     setStatus('idle');
     setResultMessage('');
     setJobId('');

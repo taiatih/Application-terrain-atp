@@ -7,6 +7,8 @@ interface Props {
   formData: QuickActionFormData;
   onSubmit: () => void;
   onBack: () => void;
+  step?: number;
+  totalSteps?: number;
 }
 
 const URGENCY_LABELS: Record<string, string> = {
@@ -19,9 +21,9 @@ const URGENCY_COLORS: Record<string, string> = {
   urgent: 'text-orange-700 bg-orange-50',
 };
 
-export default function Step4_Summary({ formData, onSubmit, onBack }: Props) {
+export default function Step4_Summary({ formData, onSubmit, onBack, step, totalSteps }: Props) {
   return (
-    <StepScreen title="Récapitulatif">
+    <StepScreen title="Récapitulatif" step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-3 flex-grow">
         <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
           <p className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">
