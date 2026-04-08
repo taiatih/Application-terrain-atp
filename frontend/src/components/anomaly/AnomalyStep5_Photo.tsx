@@ -10,15 +10,44 @@ interface Props {
   totalSteps?: number;
 }
 
+/**
+ * Compresse une image via canvas : redimensionne à maxWidth et encode en JPEG.
+ */
+function compressImage(dataUrl: string, maxWidth = 1200, quality = 0.8): Promise<string> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let { width, height } = img;
+      if (width > maxWidth) {
+        height = Math.round((height * maxWidth) / width);
+        width = maxWidth;
+      }
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) { resolve(dataUrl); return; }
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}
+
 export default function AnomalyStep5_Photo({ defaultValue, onNext, onBack, step, totalSteps }: Props) {
   const [preview, setPreview] = useState<string>(defaultValue);
+  const [compressing, setCompressing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleFile = (file: File) => {
+  const handleFile = async (file: File) => {
+    setCompressing(true);
     const reader = new FileReader();
-    reader.onload = (e) => {
-      const result = e.target?.result as string;
-      setPreview(result);
+    reader.onload = async (e) => {
+      const raw = e.target?.result as string;
+      const compressed = await compressImage(raw);
+      setPreview(compressed);
+      setCompressing(false);
     };
     reader.readAsDataURL(file);
   };
@@ -39,7 +68,12 @@ export default function AnomalyStep5_Photo({ defaultValue, onNext, onBack, step,
         Optionnel — prenez une photo ou importez une image.
       </p>
 
-      {preview ? (
+      {compressing ? (
+        <div className="flex flex-col items-center justify-center py-10 gap-3">
+          <div className="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin" />
+          <p className="text-sm text-gray-400">Traitement de la photo...</p>
+        </div>
+      ) : preview ? (
         <div className="flex flex-col items-center gap-3">
           <img
             src={preview}
@@ -75,6 +109,7 @@ export default function AnomalyStep5_Photo({ defaultValue, onNext, onBack, step,
         onBack={onBack}
         onNext={() => onNext(preview)}
         nextLabel="Suivant"
+        nextDisabled={compressing}
       />
     </StepScreen>
   );

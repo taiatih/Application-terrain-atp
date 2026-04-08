@@ -8,7 +8,10 @@ import { anomalyRoutes } from './api/anomaly.route';
 import { printingRoutes } from './api/printing.route';
 import { operatorsRoutes } from './api/operators.route';
 
-const server = Fastify({ logger: true });
+const server = Fastify({
+  logger: true,
+  bodyLimit: 10 * 1024 * 1024, // 10 MB — nécessaire pour les photos base64 prises sur mobile
+});
 
 // CORS — ouvert en développement
 server.register(cors, { origin: '*' });

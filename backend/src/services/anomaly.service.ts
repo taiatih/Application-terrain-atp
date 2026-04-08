@@ -1,5 +1,5 @@
 import { AnomalyPayload } from '../types/anomaly.schema';
-import { isNotConfigured, createClickUpTask } from './clickup.base';
+import { isNotConfigured, createClickUpTask, attachPhotoToTask } from './clickup.base';
 
 export async function createAnomalyTask(payload: AnomalyPayload): Promise<{ id: string }> {
   const token = process.env.CLICKUP_API_TOKEN || '';
@@ -21,7 +21,7 @@ export async function createAnomalyTask(payload: AnomalyPayload): Promise<{ id: 
     payload.photoBase64 ? `\nUne photo a été jointe à cette anomalie.` : null,
   ].filter(Boolean) as string[];
 
-  const id = await createClickUpTask({
+  const taskId = await createClickUpTask({
     listId,
     token,
     name: taskName,
@@ -29,5 +29,15 @@ export async function createAnomalyTask(payload: AnomalyPayload): Promise<{ id: 
     priority: 2,
   });
 
-  return { id };
+  // Upload de la photo en pièce jointe si présente
+  if (payload.photoBase64) {
+    await attachPhotoToTask({
+      taskId,
+      token,
+      photoBase64: payload.photoBase64,
+      filename: `anomalie-${Date.now()}`,
+    });
+  }
+
+  return { id: taskId };
 }
