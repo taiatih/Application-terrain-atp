@@ -46,11 +46,11 @@ export function useConsumableForm() {
     setSubmitting(false);
   }, []);
 
-  // Le flow est : 1=demandeur, 2=item, 3=quantité, 4=zone, 5=commentaire, 6=récap, 7=résultat
+  // Le flow est : 1=item, 2=quantité, 3=zone, 4=commentaire, 5=récap, 6=résultat
   const submit = useCallback(async () => {
     setSubmitting(true);
     setResult(null);
-    setStep(7);
+    setStep(6);
 
     try {
       const res = await apiClient.post<ApiResult>('/consumable', {

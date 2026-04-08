@@ -35,7 +35,7 @@ export function useAnomalyForm() {
 
   const submit = async () => {
     setSubmitting(true);
-    setStep(8); // écran résultat
+    setStep(7); // écran résultat
     try {
       const response = await apiClient.post<ApiResult>('/anomaly', formData);
       const data = response.data;
